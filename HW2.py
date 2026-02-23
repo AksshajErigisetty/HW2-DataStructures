@@ -1,27 +1,20 @@
 import csv
+
+# NOTE :
+# I did not use ChatGPT in this project.
+
+
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
-        self.val = val
+        self.val = val      # operator like '+' or operand like '3'
         self.left = left
         self.right = right
 
 
 class HomeWork2:
-
-    # Problem 1: Construct an expression tree (Binary Tree) from a postfix expression
-    # input -> list of strings (e.g., [3,4,+,2,*])
-    # this is parsed from p1_construct_tree.csv (check it out for clarification)
-
-    # there are no duplicate numeric values in the input
-    # support basic operators: +, -, *, /
-
-    # output -> the root node of the expression tree. Here: [*,+,2,3,4,None,None]
-    # Tree Node with * as root node, the tree should be as follows
-    #         *
-    #        / \
-    #       +   2
-    #      / \
-    #     3   4
+    # Problem 1: Construct an expression tree from a postfix expression list
+    # input example: ["3","4","+","2","*"]
+    # output: root TreeNode
 
     def constructBinaryTree(self, input) -> TreeNode:
         if input is None or len(input) == 0:
@@ -61,31 +54,64 @@ class HomeWork2:
 
         return stack.pop()
 
-
+    # Problem 2.1: Prefix (pre-order): root, left, right
     def prefixNotationPrint(self, head: TreeNode) -> list:
-        pass
+        if head is None:
+            return []
 
-    # Problem 2.2: Use in-order traversal (left, root, right) for infix notation with appropriate parentheses.
-    # return an array of elements of an infix expression
-    # expected output for the tree from problem 1 is [(,(,3,+,4,),*,2,)]
-    # you can see the examples in p2_traversals.csv
+        result = []
 
-    # don't forget to add parentheses to maintain correct sequence
-    # even the outermost expression should be wrapped
-    # treat parentheses as individual elements in the returned list (see output)
+        def preorder(node):
+            if node is None:
+                return
+            result.append(str(node.val))
+            preorder(node.left)
+            preorder(node.right)
 
+        preorder(head)
+        return result
+
+    # Problem 2.2: Infix (in-order) with parentheses
+    # Requirement: parentheses must be included even for the outermost expression
+    # and parentheses must be individual elements in the returned list.
     def infixNotationPrint(self, head: TreeNode) -> list:
-        pass
+        if head is None:
+            return []
 
+        operators = {"+", "-", "*", "/"}
 
-    # Problem 2.3: Use post-order traversal (left, right, root) to generate postfix notation.
-    # return an array of elements of a postfix expression
-    # expected output for the tree from problem 1 is [3,4,+,2,*]
-    # you can see the examples in p2_traversals.csv
+        def build(node):
+            # Leaf (operand)
+            if node.left is None and node.right is None:
+                return [str(node.val)]
 
+            # Operator nodes should always have two children
+            if str(node.val) not in operators or node.left is None or node.right is None:
+                raise ValueError("wrong expression tree")
+
+            left_part = build(node.left)
+            right_part = build(node.right)
+
+            return ["("] + left_part + [str(node.val)] + right_part + [")"]
+
+        return build(head)
+
+    # Problem 2.3: Postfix (post-order): left, right, root
     def postfixNotationPrint(self, head: TreeNode) -> list:
-        pass
+        if head is None:
+            return []
 
+        result = []
+
+        def postorder(node):
+            if node is None:
+                return
+            postorder(node.left)
+            postorder(node.right)
+            result.append(str(node.val))
+
+        postorder(head)
+        return result
 
 class Stack:
     # Implement your stack using either an array or a list

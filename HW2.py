@@ -24,14 +24,43 @@ class HomeWork2:
     #     3   4
 
     def constructBinaryTree(self, input) -> TreeNode:
-        pass
+        if input is None or len(input) == 0:
+            return None
 
+        ops = {"+", "-", "*", "/"}
+        stack = []  
 
+        for token in input:
+            token = token.strip()
 
-    # Problem 2.1: Use pre-order traversal (root, left, right) to generate prefix notation
-    # return an array of elements of a prefix expression
-    # expected output for the tree from problem 1 is [*,+,3,4,2]
-    # you can see the examples in p2_traversals.csv
+            if token in ops:
+                
+                if len(stack) < 2:
+                    raise ValueError("Wrong operands")
+
+                right = stack.pop()
+                left = stack.pop()
+
+                newNode = TreeNode(token)
+                newNode.left = left
+                newNode.right = right
+                stack.append(newNode)
+            else:
+               
+                try:
+                    float(token)
+                except ValueError:
+                    raise ValueError("Invalid token")
+
+                node = TreeNode(token)
+                stack.append(node)                
+
+        # In a valid postfix expression, one tree remains
+        if len(stack) != 1:
+            raise ValueError("Invalid postfix expression")
+
+        return stack.pop()
+
 
     def prefixNotationPrint(self, head: TreeNode) -> list:
         pass

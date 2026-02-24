@@ -126,7 +126,12 @@ class HomeWork2:
         postorder(head)
         return result
 
-
+# Problem 3: Evaluate postfix expression using stack
+# I split the expression by space and check each token.
+# If it is a number, I push it to the stack.
+# If it is an operator, I pop two numbers, perform the operation, and push the result back.
+# It also checks for invalid input and division by zero.
+# At the end, only one value should remain, which is the final answer.
 class Stack:
     # Stack ADT using a Python list, but we manually track 'top'
     def __init__(self):
@@ -151,9 +156,7 @@ class Stack:
     def size(self):
         return self.top + 1
 
-    # Problem 3: Evaluate a space-separated postfix expression string
-    # Do NOT use eval(). Support +, -, *, /
-    # Handle division by zero by raising ZeroDivisionError
+
     def evaluatePostfix(self, exp: str) -> int:
         if exp is None or exp.strip() == "":
             raise ValueError("Empty expression")
@@ -164,7 +167,7 @@ class Stack:
         parts = exp.split()
 
         for t in parts:
-        # if it is an operator, pop two numbers and do the math
+        
             if t in ops:
                 if self.size() < 2:
                     raise ValueError("Not enough numbers")
@@ -186,7 +189,7 @@ class Stack:
                 except:
                     raise ValueError("Invalid token")
 
-    # at the end, we should have only one answer left
+    
         if self.size() != 1:
             raise ValueError("Invalid postfix expression")
         answer = self.pop()

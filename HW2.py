@@ -17,12 +17,15 @@ class HomeWork2:
     # output: root TreeNode
 
     def constructBinaryTree(self, input) -> TreeNode:
+        # Firstly checking if it is empty and returning none.
         if input is None or len(input) == 0:
             return None
-
+        
+        # saving the operands in the ops and stck to save the trees nodes
         ops = {"+", "-", "*", "/"}
         stack = []  
-
+        #So here we Go through each token in the postfix list and If token is an operator, 
+        # we pop the two nodes and create a node then push to the new subtree but if lessthan 2, weget wrong operands as the output
         for token in input:
             token = token.strip()
 
@@ -48,13 +51,16 @@ class HomeWork2:
                 node = TreeNode(token)
                 stack.append(node)                
 
-        # In a valid postfix expression, one tree remains
+        # after processing all of them we get one node and that is the root.
         if len(stack) != 1:
             raise ValueError("Invalid postfix expression")
 
         return stack.pop()
 
-    # Problem 2.1: Prefix (pre-order): root, left, right
+    # Problem 2.1: 
+    # In prefix, we visit the root first, then left node, then right right node .
+    # I used a helper recursive function to go through the tree.
+    # The values are stored in a list and returned at the end. and also it checks if the tree is empty.
     def prefixNotationPrint(self, head: TreeNode) -> list:
         if head is None:
             return []
@@ -71,9 +77,9 @@ class HomeWork2:
         preorder(head)
         return result
 
-    # Problem 2.2: Infix (in-order) with parentheses
-    # Requirement: parentheses must be included even for the outermost expression
-    # and parentheses must be individual elements in the returned list.
+    # Problem 2.2
+    # here we use Parentheses are added to keep the correct expression order
+    # The result is stored as a list and returned.
     def infixNotationPrint(self, head: TreeNode) -> list:
         if head is None:
             return []
@@ -81,7 +87,7 @@ class HomeWork2:
         operators = {"+", "-", "*", "/"}
 
         def build(node):
-            # Leaf (operand)
+            
             if node.left is None and node.right is None:
                 return [str(node.val)]
 
@@ -96,7 +102,13 @@ class HomeWork2:
 
         return build(head)
 
-    # Problem 2.3: Postfix (post-order): left, right, root
+    # Problem 2.3: Postfix traversal
+    #in postfix node, we visit left,right and then the root.
+    # i then used a recursive function to go through the tree
+    # each node value is added to the list 
+    #this gives the correct postflix order 
+    
+
     def postfixNotationPrint(self, head: TreeNode) -> list:
         if head is None:
             return []

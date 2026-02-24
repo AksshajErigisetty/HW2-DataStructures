@@ -113,6 +113,7 @@ class HomeWork2:
         postorder(head)
         return result
 
+
 class Stack:
     # Implement your stack using either an array or a list
     # (i.e., implement the functions based on the Stack ADT we covered in class)

@@ -1,7 +1,8 @@
 import csv
 
 # NOTE :
-# I did not use ChatGPT in this project.
+# I did not use AI in this project. I refered to slides and notes. 
+# No external sources were used; all ideas are my own or from course lecture slides.
 
 
 class TreeNode:
@@ -127,34 +128,70 @@ class HomeWork2:
 
 
 class Stack:
-    # Implement your stack using either an array or a list
-    # (i.e., implement the functions based on the Stack ADT we covered in class)
-    # You may use Python's list structure as the underlying storage.
-    # While you can use .append() to add elements, please ensure the implementation strictly follows the logic we discussed in class
-    # (e.g., manually managing the "top" of the stack
-    
-    # Use your own stack implementation to solve problem 3
-
+    # Stack ADT using a Python list, but we manually track 'top'
     def __init__(self):
-        # TODO: initialize the stack
-        pass
+        self.data = []
+        self.top = -1
 
-    # Problem 3: Write code to evaluate a postfix expression using stack and return the integer value
-    # Use stack which you implemented above for this problem
+    def isEmpty(self):
+        return self.top == -1
 
-    # input -> a postfix expression string. E.g.: "5 1 2 + 4 * + 3 -"
-    # see the examples of test entries in p3_eval_postfix.csv
-    # output -> integer value after evaluating the string. Here: 14
+    def push(self, x):
+        self.data.append(x)
+        self.top += 1
 
-    # integers are positive and negative
-    # support basic operators: +, -, *, /
-    # handle division by zero appropriately
+    def pop(self):
+        if self.isEmpty():
+            raise IndexError("pop from empty stack")
+        value = self.data[self.top]
+        self.data.pop()
+        self.top -= 1
+        return value
 
-    # DO NOT USE EVAL function for evaluating the expression
+    def size(self):
+        return self.top + 1
 
-    def evaluatePostfix(exp: str) -> int:
-        # TODO: implement this using your Stack class
-        pass
+    # Problem 3: Evaluate a space-separated postfix expression string
+    # Do NOT use eval(). Support +, -, *, /
+    # Handle division by zero by raising ZeroDivisionError
+    def evaluatePostfix(self, exp: str) -> int:
+        if exp is None or exp.strip() == "":
+            raise ValueError("Empty expression")
+
+
+
+        ops = ["+", "-", "*", "/"]
+        parts = exp.split()
+
+        for t in parts:
+        # if it is an operator, pop two numbers and do the math
+            if t in ops:
+                if self.size() < 2:
+                    raise ValueError("Not enough numbers")
+                num2 = self.pop()
+                num1 = self.pop()
+                if t == "+":
+                    self.push(num1 + num2)
+                elif t == "-":
+                    self.push(num1 - num2)
+                elif t == "*":
+                    self.push(num1 * num2)
+                else:  
+                    if num2 == 0:
+                        raise ZeroDivisionError("division by zero")
+                    self.push(num1 / num2)
+            else:
+                try:
+                    self.push(float(t))
+                except:
+                    raise ValueError("Invalid token")
+
+    # at the end, we should have only one answer left
+        if self.size() != 1:
+            raise ValueError("Invalid postfix expression")
+        answer = self.pop()
+        return int(round(answer))
+
 
 
 # Main Function. Do not edit the code below

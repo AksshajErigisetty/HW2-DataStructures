@@ -1,22 +1,33 @@
 import csv
 
 # NOTE :
-# I did not use AI in this project. I refered to slides and notes. 
+# I did not use AI in this project. I refered to slides and notes I Prepared. 
+# I also referred to the Data Structures — Python 3.14.3 documentation for the edge cases tester.
 # No external sources were used; all ideas are my own or from course lecture slides.
 
 
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
-        self.val = val      # operator like '+' or operand like '3'
+        self.val = val     
         self.left = left
         self.right = right
 
 
 class HomeWork2:
-    # Problem 1: Construct an expression tree from a postfix expression list
-    # input example: ["3","4","+","2","*"]
-    # output: root TreeNode
+    # Problem 1: Construct an expression tree (Binary Tree) from a postfix expression
+    # input -> list of strings (e.g., [3,4,+,2,*])
+    # this is parsed from p1_construct_tree.csv (check it out for clarification)
 
+    # there are no duplicate numeric values in the input
+    # support basic operators: +, -, *, /
+
+    # output -> the root node of the expression tree. Here: [*,+,2,3,4,None,None]
+    # Tree Node with * as root node, the tree should be as follows
+    #         *
+    #        / \
+    #       +   2
+    #      / \
+    #     3   4
     def constructBinaryTree(self, input) -> TreeNode:
         # Firstly checking if it is empty and returning none.
         if input is None or len(input) == 0:
@@ -52,13 +63,18 @@ class HomeWork2:
                 node = TreeNode(token)
                 stack.append(node)                
 
-        # after processing all of them we get one node and that is the root.
+        
         if len(stack) != 1:
             raise ValueError("Invalid postfix expression")
 
         return stack.pop()
 
-    # Problem 2.1: 
+    # Problem 2.1: Use pre-order traversal (root, left, right) to generate prefix notation
+    # return an array of elements of a prefix expression
+    # expected output for the tree from problem 1 is [*,+,3,4,2]
+    # you can see the examples in p2_traversals.csv
+    
+    
     # In prefix, we visit the root first, then left node, then right right node .
     # I used a helper recursive function to go through the tree.
     # The values are stored in a list and returned at the end. and also it checks if the tree is empty.
@@ -78,7 +94,17 @@ class HomeWork2:
         preorder(head)
         return result
 
-    # Problem 2.2
+    # Problem 2.2: Use in-order traversal (left, root, right) for infix notation with appropriate parentheses.
+    # return an array of elements of an infix expression
+    # expected output for the tree from problem 1 is [(,(,3,+,4,),*,2,)]
+    # you can see the examples in p2_traversals.csv
+
+    # don't forget to add parentheses to maintain correct sequence
+    # even the outermost expression should be wrapped
+    # treat parentheses as individual elements in the returned list (see output)
+    
+    
+    
     # here we use Parentheses are added to keep the correct expression order
     # The result is stored as a list and returned.
     def infixNotationPrint(self, head: TreeNode) -> list:
@@ -103,7 +129,13 @@ class HomeWork2:
 
         return build(head)
 
-    # Problem 2.3: Postfix traversal
+    # Problem 2.3: Use post-order traversal (left, right, root) to generate postfix notation.
+    # return an array of elements of a postfix expression
+    # expected output for the tree from problem 1 is [3,4,+,2,*]
+    # you can see the examples in p2_traversals.csv
+
+
+
     #in postfix node, we visit left,right and then the root.
     # i then used a recursive function to go through the tree
     # each node value is added to the list 
@@ -115,6 +147,8 @@ class HomeWork2:
             return []
 
         result = []
+        # I used a separate helper function for recursion instead of writing a function inside a function. 
+        # The helper is used to traverse the tree in left, right, root order and store the result.
 
         def postorder(node):
             if node is None:
@@ -126,14 +160,20 @@ class HomeWork2:
         postorder(head)
         return result
 
-# Problem 3: Evaluate postfix expression using stack
+# In here , Evaluate postfix expression using stack
 # I split the expression by space and check each token.
 # If it is a number, I push it to the stack.
 # If it is an operator, I pop two numbers, perform the operation, and push the result back.
 # It also checks for invalid input and division by zero.
 # At the end, only one value should remain, which is the final answer.
 class Stack:
-    # Stack ADT using a Python list, but we manually track 'top'
+    # Implement your stack using either an array or a list
+    # (i.e., implement the functions based on the Stack ADT we covered in class)
+    # You may use Python's list structure as the underlying storage.
+    # While you can use .append() to add elements, please ensure the implementation strictly follows the logic we discussed in class
+    # (e.g., manually managing the "top" of the stack
+    
+    # Use your own stack implementation to solve problem 3
     def __init__(self):
         self.data = []
         self.top = -1
@@ -155,7 +195,20 @@ class Stack:
 
     def size(self):
         return self.top + 1
+    
+    
+    # Problem 3: Write code to evaluate a postfix expression using stack and return the integer value
+    # Use stack which you implemented above for this problem
 
+    # input -> a postfix expression string. E.g.: "5 1 2 + 4 * + 3 -"
+    # see the examples of test entries in p3_eval_postfix.csv
+    # output -> integer value after evaluating the string. Here: 14
+
+    # integers are positive and negative
+    # support basic operators: +, -, *, /
+    # handle division by zero appropriately
+
+    # DO NOT USE EVAL function for evaluating the expression
 
     def evaluatePostfix(self, exp: str) -> int:
         if exp is None or exp.strip() == "":
@@ -194,6 +247,70 @@ class Stack:
             raise ValueError("Invalid postfix expression")
         answer = self.pop()
         return int(round(answer))
+
+
+#Report:
+#Edge cases were handled using exception handling. The program checks for evrything specified in the rubric.
+#Python’s numeric type also allows handling very large values. Separate test cases were written to verify each edge case.
+#i did the basic level tester for problem 4 only using try and except.
+
+def problem4_edge_case_tests():
+    hw = HomeWork2()
+
+    print("\n--- Problem 4 Edge Case Tests  ---")
+
+    # 1) this checks Empty postfix
+    try:
+        hw.constructBinaryTree([])
+    except Exception as e:
+        print("Empty postfix list (tree):", type(e).__name__, "-", e)
+
+    # 2)this checks   insufficient operands 
+    try:
+        hw.constructBinaryTree(["3", "+"])
+    except Exception as e:
+        print("Insufficient operands (tree):", type(e).__name__, "-", e)
+
+    # 3) this checks if there are too many operands 
+    try:
+        hw.constructBinaryTree(["3", "4", "5", "+"])
+    except Exception as e:
+        print("Too many operands (tree):", type(e).__name__, "-", e)
+
+    # 4) Empty postfix 
+    try:
+        s = Stack()
+        s.evaluatePostfix("")
+    except Exception as e:
+        print("Empty postfix string (eval):", type(e).__name__, "-", e)
+
+    # 5) this checks Malformed postfix: insufficient operands 
+    try:
+        s = Stack()
+        s.evaluatePostfix("3 +")
+    except Exception as e:
+        print("Insufficient operands (eval):", type(e).__name__, "-", e)
+
+    # 6) this checks Division by zero
+    try:
+        s = Stack()
+        s.evaluatePostfix("10 0 /")
+    except Exception as e:
+        print("Division by zero:", type(e).__name__, "-", e)
+
+    # 7) this checks Invalid token
+    try:
+        s = Stack()
+        s.evaluatePostfix("3 4 hello +")
+    except Exception as e:
+        print("Invalid token:", type(e).__name__, "-", e)
+# to checks if there are any  Negative numbers
+    try:
+        s = Stack()
+        result = s.evaluatePostfix("5 -3 *")
+        print("Negative numbers handled, result:", result)
+    except Exception as e:
+        print("Negative numbers error:", type(e).__name__)
 
 
 
@@ -261,3 +378,8 @@ if __name__ == "__main__":
         except ZeroDivisionError:
             assert expected == "DIVZERO", f"Test {idx} unexpected division by zero"
             print(f"Test case {idx} passed (division by zero handled)")
+            
+    problem4_edge_case_tests()
+        
+            
+            

@@ -6,6 +6,9 @@ import csv
 # No external sources were used; all ideas are my own or from course lecture slides.
 
 
+# IMPORTANT NOTE:
+# in class professor said that we can't change the tester so i made test cases for problem 4 in different file.
+
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val     
@@ -28,6 +31,11 @@ class HomeWork2:
     #       +   2
     #      / \
     #     3   4
+    
+    
+    
+    # The edge cases are working properly as empty input gives notree
+    # at the end only 1 node should remain , otherwise invalid postfix
     def constructBinaryTree(self, input) -> TreeNode:
         # Firstly checking if it is empty and returning none.
         if input is None or len(input) == 0:
@@ -249,68 +257,6 @@ class Stack:
         return int(round(answer))
 
 
-#Report:
-#Edge cases were handled using exception handling. The program checks for evrything specified in the rubric.
-#Python’s numeric type also allows handling very large values. Separate test cases were written to verify each edge case.
-#i did the basic level tester for problem 4 only using try and except.
-
-def problem4_edge_case_tests():
-    hw = HomeWork2()
-
-    print("\n--- Problem 4 Edge Case Tests  ---")
-
-    # 1) this checks Empty postfix
-    try:
-        hw.constructBinaryTree([])
-    except Exception as e:
-        print("Empty postfix list (tree):", type(e).__name__, "-", e)
-
-    # 2)this checks   insufficient operands 
-    try:
-        hw.constructBinaryTree(["3", "+"])
-    except Exception as e:
-        print("Insufficient operands (tree):", type(e).__name__, "-", e)
-
-    # 3) this checks if there are too many operands 
-    try:
-        hw.constructBinaryTree(["3", "4", "5", "+"])
-    except Exception as e:
-        print("Too many operands (tree):", type(e).__name__, "-", e)
-
-    # 4) Empty postfix 
-    try:
-        s = Stack()
-        s.evaluatePostfix("")
-    except Exception as e:
-        print("Empty postfix string (eval):", type(e).__name__, "-", e)
-
-    # 5) this checks Malformed postfix: insufficient operands 
-    try:
-        s = Stack()
-        s.evaluatePostfix("3 +")
-    except Exception as e:
-        print("Insufficient operands (eval):", type(e).__name__, "-", e)
-
-    # 6) this checks Division by zero
-    try:
-        s = Stack()
-        s.evaluatePostfix("10 0 /")
-    except Exception as e:
-        print("Division by zero:", type(e).__name__, "-", e)
-
-    # 7) this checks Invalid token
-    try:
-        s = Stack()
-        s.evaluatePostfix("3 4 hello +")
-    except Exception as e:
-        print("Invalid token:", type(e).__name__, "-", e)
-# to checks if there are any  Negative numbers
-    try:
-        s = Stack()
-        result = s.evaluatePostfix("5 -3 *")
-        print("Negative numbers handled, result:", result)
-    except Exception as e:
-        print("Negative numbers error:", type(e).__name__)
 
 
 
@@ -379,7 +325,7 @@ if __name__ == "__main__":
             assert expected == "DIVZERO", f"Test {idx} unexpected division by zero"
             print(f"Test case {idx} passed (division by zero handled)")
             
-    problem4_edge_case_tests()
+
         
             
             

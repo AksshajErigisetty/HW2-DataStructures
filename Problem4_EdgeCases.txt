@@ -1,0 +1,86 @@
+# Problem 4: Edge Case Testing
+# In this file, I am testing different edge cases to make sure my program
+# handles incorrect inputs properly and raises the correct errors.
+#For creating any tester, we only have to use try and exception method.
+
+
+
+def problem4_edge_case_tests():
+    hw = HomeWork2()
+
+    # Empty postfix expressions
+    try:
+        hw.constructBinaryTree([])
+    except Exception as e:
+        print(type(e).__name__, "-", e)
+
+For this output is like this - ValueError - Wrong operands
+
+
+
+    # Malformed postfix expressions (insufficient operands, too many operands)
+    try:
+        hw.constructBinaryTree(["3", "+"])
+    except Exception as e:
+        print( type(e).__name__, "-", e)
+For this output is like this - ValueError - Invalid postfix expression
+
+
+
+    # Too many operands left in stack
+    try:
+        hw.constructBinaryTree(["3", "4", "5", "+"])
+    except Exception as e:
+        print(type(e).__name__, "-", e)
+For this output is like this -ValueError - Invalid postfix expression
+
+
+
+    #  Empty postfix string for evaluation
+    try:
+        s = Stack()
+        s.evaluatePostfix("")
+    except Exception as e:
+        print(type(e).__name__, "-", e)
+For this output is like this -    ValueError - Empty expression   
+
+
+
+    # Not enough numbers during evaluation
+    try:
+        s = Stack()
+        s.evaluatePostfix("3 +")
+    except Exception as e:
+        print( type(e).__name__, "-", e)
+For this output is like this - ValueError - Not enough numbers
+
+
+    #Division by zero
+    try:
+        s = Stack()
+        s.evaluatePostfix("10 0 /")
+    except Exception as e:
+        print(type(e).__name__, "-", e)
+For this output is like this - ZeroDivisionError - division by zero
+
+
+
+    #Invalid token in expression
+    try:
+        s = Stack()
+        s.evaluatePostfix("3 4 hello +")
+    except Exception as e:
+        print(type(e).__name__, "-", e)
+For this output is like this - Invalid token
+
+
+
+    # Negative numbers
+    try:
+        s = Stack()
+        result = s.evaluatePostfix("5 -3 *")
+        print( result)
+    except Exception as e:
+        print( type(e).__name__, "-", e)
+For this output is like this - -15
+
